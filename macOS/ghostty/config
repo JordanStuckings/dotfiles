@@ -1,0 +1,25 @@
+# ~/.config/ghostty/config
+
+# Theme
+theme = Rose Pine
+
+# Font
+font-family = JetBrains Mono
+font-size = 15
+
+# Window style
+window-decoration = auto
+macos-titlebar-style = transparent
+
+# Background transparency & blur
+background = #1e1e2e
+background-opacity = 0.8
+background-blur-radius = 20
+
+# Padding
+window-padding-x = 10
+window-padding-y = 10
+
+# Misc
+mouse-hide-while-typing = true
+cursor-style = block
