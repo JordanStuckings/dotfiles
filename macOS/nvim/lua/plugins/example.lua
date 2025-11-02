@@ -78,7 +78,6 @@ return {
       })
     end,
   },
-
   {
     "mason-org/mason.nvim",
     opts = {
@@ -87,6 +86,16 @@ return {
         "shellcheck",
         "shfmt",
         "flake8",
+      },
+    },
+  },
+  {
+    "folke/snacks.nvim",
+    opts = {
+      picker = {
+        hidden = true,
+        ignored = true,
+        exclude = { "node_modules", ".git" },
       },
     },
   },

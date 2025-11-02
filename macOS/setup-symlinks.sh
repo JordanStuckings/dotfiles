@@ -28,6 +28,9 @@ main() {
   link_into "$REPO_ROOT/macOS/nvim" "$HOME/.config/nvim"
   # Ghostty
   link_into "$REPO_ROOT/macOS/ghostty" "$HOME/.config/ghostty"
+  # .bash_profile
+  link_into "$REPO_ROOT/macos/.bash_profile" "$HOME/.bash_profile"
+
   # ⬇️ Add more as you grow your repo, e.g.:
   # link_into "$REPO_ROOT/macOS/kitty" "$HOME/.config/kitty"
   # link_into "$REPO_ROOT/zsh/.zshrc" "$HOME/.zshrc"
