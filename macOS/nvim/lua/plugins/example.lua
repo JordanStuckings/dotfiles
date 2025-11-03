@@ -1,16 +1,16 @@
 -- This sample spec shows a few safe patterns for extending LazyVim.
 return {
-  {
-    "ribru17/bamboo.nvim",
-    lazy = false,
-    priority = 1000,
-    config = function()
-      require("bamboo").setup({})
-      require("bamboo").load()
-      vim.cmd.colorscheme("bamboo")
-    end,
-  },
-
+  -- {
+  --   "ribru17/bamboo.nvim",
+  --   lazy = false,
+  --   priority = 1000,
+  --   config = function()
+  --     require("bamboo").setup({})
+  --     require("bamboo").load()
+  --     vim.cmd.colorscheme("bamboo")
+  --   end,
+  -- },
+  --
   {
     "folke/trouble.nvim",
     opts = { use_diagnostic_signs = true },
@@ -89,14 +89,14 @@ return {
       },
     },
   },
-  {
-    "folke/snacks.nvim",
-    opts = {
-      picker = {
-        hidden = true,
-        ignored = true,
-        exclude = { "node_modules", ".git" },
-      },
-    },
-  },
+  --   {
+  --     "folke/snacks.nvim",
+  --     opts = {
+  --       picker = {
+  --         hidden = true,
+  --         ignored = true,
+  --         exclude = { "node_modules", ".git" },
+  --       },
+  --     },
+  --   },
 }
