@@ -13,3 +13,9 @@ export EDITOR=nvim
 export VISUAL=nvim
 
 alias ls="/opt/homebrew/opt/coreutils/libexec/gnubin/ls -A --color=auto"
+
+# Source local overrides if they exist
+if [ -f "$HOME/.bash_profile.local" ]; then
+  source "$HOME/.bash_profile.local"
+fi
+if [ -f "$HOME/.afm-bin-path-manager.bash" ]; then source "$HOME/.afm-bin-path-manager.bash"; fi

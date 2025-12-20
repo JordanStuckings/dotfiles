@@ -66,7 +66,9 @@ return {
         hi("CursorLineNr", { fg = colors.cyan, style = "bold" })
         hi("LineNr", { fg = colors.bright_black })
         hi("SignColumn", { bg = "NONE" })
-        hi("Visual", { bg = colors.blue })
+        -- hi("Visual", { bg = colors.blue })
+        hi("Visual", { bg = "#1a3a2d" }) -- Very dark green-blue
+
         hi("VisualNOS", { bg = colors.blue })
         hi("Search", { fg = colors.bg, bg = colors.bright_yellow })
         hi("IncSearch", { fg = colors.bg, bg = colors.cyan })
