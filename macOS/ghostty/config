@@ -3,6 +3,10 @@
 # Theme
 theme = Rose Pine
 
+# Menu Bar
+macos-titlebar-style = hidden
+window-decoration = none
+
 # Font
 font-family = JetBrains Mono
 font-size = 15
