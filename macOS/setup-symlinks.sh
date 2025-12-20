@@ -33,6 +33,8 @@ main() {
 
   # tmux
   link_into "$REPO_ROOT/macos/tmux" "$HOME/.config/tmux"
+
+  link_into "$REPO_ROOT/macos/tmux-sessionizer" "$HOME/.config/tmux-sessionizer"
   # ⬇️ Add more as you grow your repo, e.g.:
   # link_into "$REPO_ROOT/macOS/kitty" "$HOME/.config/kitty"
   # link_into "$REPO_ROOT/zsh/.zshrc" "$HOME/.zshrc"
