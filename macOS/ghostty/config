@@ -27,3 +27,5 @@ window-padding-y = 10
 # Misc
 mouse-hide-while-typing = true
 cursor-style = block
+
+keybind = shift+enter=text:\x1b\r

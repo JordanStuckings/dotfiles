@@ -28,6 +28,8 @@ main() {
   link_into "$REPO_ROOT/macOS/nvim" "$HOME/.config/nvim"
   # Ghostty
   link_into "$REPO_ROOT/macOS/ghostty" "$HOME/.config/ghostty"
+  # LunarVim
+  link_into "$REPO_ROOT/macOS/lvim" "$HOME/.config/lvim"
   # .bash_profile
   link_into "$REPO_ROOT/macos/.bash_profile" "$HOME/.bash_profile"
 
