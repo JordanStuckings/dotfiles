@@ -21,3 +21,7 @@ shell-integration-features = no-cursor
 keybind = f11=toggle_fullscreen
 keybind = shift+insert=paste_from_clipboard
 keybind = control+insert=copy_to_clipboard
+
+# Fix Codex / CLI tools key behavior
+keybind = shift+enter=text:\x1b\r
+keybind = shift+tab=text:\x1b[Z
