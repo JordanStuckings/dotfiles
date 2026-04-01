@@ -1,0 +1,18 @@
+# macOS
+.DS_Store
+
+# Neovim plugin state (managed by lazy.nvim at runtime)
+**/nvim/plugin/
+
+# Editor swap / undo files
+*.swp
+*.swo
+*~
+*.un~
+
+# Local overrides (not committed)
+*.local
+*.local.*
+
+# Reference repos (inspiration only, not tracked)
+reference/

@@ -14,6 +14,9 @@ export VISUAL=nvim
 
 alias ls="/opt/homebrew/opt/coreutils/libexec/gnubin/ls -A --color=auto"
 
+# Rovo Dev shortcut — auto-starts in yolo mode
+alias rovodev='acli rovodev tui --yolo'
+
 # Source local overrides if they exist
 if [ -f "$HOME/.bash_profile.local" ]; then
   source "$HOME/.bash_profile.local"
