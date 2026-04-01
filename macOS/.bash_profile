@@ -12,6 +12,18 @@ export GIT_EDITOR=nvim
 export EDITOR=nvim
 export VISUAL=nvim
 
+# zoxide – smart cd with frecency (required by sesh)
+if command -v zoxide &>/dev/null; then
+  eval "$(zoxide init bash)"
+fi
+
+# television (tv) – shell integration for smart autocomplete & history
+# Ctrl-T: context-aware autocomplete (e.g. git checkout <C-t> → branches)
+# Ctrl-R: fuzzy command history search
+if command -v tv &>/dev/null; then
+  eval "$(tv init bash)"
+fi
+
 alias ls="/opt/homebrew/opt/coreutils/libexec/gnubin/ls -A --color=auto"
 
 # Rovo Dev shortcut — auto-starts in yolo mode

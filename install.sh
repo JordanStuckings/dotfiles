@@ -20,7 +20,7 @@
 set -euo pipefail
 
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
-PROFILE="${1:-macOS}"
+PROFILE=""
 DRY_RUN=false
 
 # ── Parse flags ──────────────────────────────────────────────
@@ -35,6 +35,8 @@ for arg in "$@"; do
     *) PROFILE="$arg" ;;
   esac
 done
+
+PROFILE="${PROFILE:-macOS}"
 
 STOW_DIR="$SCRIPT_DIR/$PROFILE"
 
@@ -107,6 +109,10 @@ fi
 require_cmd git "brew install git" || true
 require_cmd nvim "brew install neovim" || true
 require_cmd tmux "brew install tmux" || true
+require_cmd sesh "brew install joshmedeski/sesh/sesh" || true
+require_cmd tv "brew install television" || true
+require_cmd zoxide "brew install zoxide" || true
+require_cmd fd "brew install fd" || true
 echo ""
 
 # ── 2. Stow ~/.config targets ───────────────────────────────

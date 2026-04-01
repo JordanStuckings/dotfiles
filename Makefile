@@ -27,10 +27,14 @@ help: ## Show this help
 
 doctor: ## Check that required tools are installed
 	@echo "Checking prerequisites…"
-	@command -v stow  >/dev/null 2>&1 && echo "  ✓ stow"  || echo "  ✗ stow   – install with: brew install stow"
-	@command -v nvim  >/dev/null 2>&1 && echo "  ✓ nvim"  || echo "  ✗ nvim   – install with: brew install neovim"
-	@command -v tmux  >/dev/null 2>&1 && echo "  ✓ tmux"  || echo "  ✗ tmux   – install with: brew install tmux"
-	@command -v git   >/dev/null 2>&1 && echo "  ✓ git"   || echo "  ✗ git    – install with: brew install git"
+	@command -v stow   >/dev/null 2>&1 && echo "  ✓ stow"   || echo "  ✗ stow   – install with: brew install stow"
+	@command -v nvim   >/dev/null 2>&1 && echo "  ✓ nvim"   || echo "  ✗ nvim   – install with: brew install neovim"
+	@command -v tmux   >/dev/null 2>&1 && echo "  ✓ tmux"   || echo "  ✗ tmux   – install with: brew install tmux"
+	@command -v git    >/dev/null 2>&1 && echo "  ✓ git"    || echo "  ✗ git    – install with: brew install git"
+	@command -v sesh   >/dev/null 2>&1 && echo "  ✓ sesh"   || echo "  ✗ sesh   – install with: brew install joshmedeski/sesh/sesh"
+	@command -v tv     >/dev/null 2>&1 && echo "  ✓ tv"     || echo "  ✗ tv     – install with: brew install television"
+	@command -v zoxide >/dev/null 2>&1 && echo "  ✓ zoxide" || echo "  ✗ zoxide – install with: brew install zoxide"
+	@command -v fd     >/dev/null 2>&1 && echo "  ✓ fd"     || echo "  ✗ fd     – install with: brew install fd"
 	@echo ""
 	@echo "Profile: $(PROFILE)"
 	@test -d "$(STOW_DIR)" && echo "  ✓ $(STOW_DIR) exists" || echo "  ✗ $(STOW_DIR) not found"

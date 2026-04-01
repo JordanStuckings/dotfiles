@@ -1,0 +1,22 @@
+# ──────────────────────────────────────────────────────────────
+# sesh – tmux session manager config
+# https://github.com/joshmedeski/sesh
+#
+# Pinned sessions appear at the top of `sesh list` and are
+# auto-created when you `sesh connect <name>`.
+# ──────────────────────────────────────────────────────────────
+
+[default_session]
+# Fallback when no session name is provided
+# startup_command = "nvim"
+
+[[session]]
+name = "dotfiles 🔧"
+path = "~/.dotfiles"
+# startup_command = "nvim"
+
+# ── Add your pinned project sessions below ──────────────────
+# [[session]]
+# name = "myproject"
+# path = "~/projects/myproject"
+# startup_command = "nvim"
