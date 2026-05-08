@@ -18,6 +18,7 @@
 PROFILE ?= macOS
 STOW    := stow
 STOW_DIR := $(CURDIR)/$(PROFILE)
+STOW_TARGET := $(HOME)/.config
 
 .PHONY: help install uninstall stow unstow restow doctor list
 
@@ -41,20 +42,20 @@ doctor: ## Check that required tools are installed
 
 stow: ## Symlink ~/.config targets via GNU Stow
 	@echo "Stowing $(PROFILE) → ~/.config …"
-	cd "$(STOW_DIR)" && $(STOW) .
+	cd "$(STOW_DIR)" && $(STOW) --target="$(STOW_TARGET)" .
 
 unstow: ## Remove stow-managed symlinks
 	@echo "Unstowing $(PROFILE) from ~/.config …"
-	cd "$(STOW_DIR)" && $(STOW) -D .
+	cd "$(STOW_DIR)" && $(STOW) --target="$(STOW_TARGET)" -D .
 
 restow: ## Re-stow (unstow then stow — fixes conflicts)
 	@echo "Restowing $(PROFILE) → ~/.config …"
-	cd "$(STOW_DIR)" && $(STOW) -R .
+	cd "$(STOW_DIR)" && $(STOW) --target="$(STOW_TARGET)" -R .
 
 install: doctor ## Full install: stow + profile-specific extras (e.g. .bash_profile)
 	@echo ""
 	@echo "── Installing profile: $(PROFILE) ──"
-	cd "$(STOW_DIR)" && $(STOW) .
+	cd "$(STOW_DIR)" && $(STOW) --target="$(STOW_TARGET)" .
 ifeq ($(PROFILE),macOS)
 	@# .bash_profile lives at $HOME, not ~/.config — link it separately
 	@if [ -f "$(STOW_DIR)/.bash_profile" ]; then \
@@ -71,7 +72,7 @@ endif
 
 uninstall: ## Remove all symlinks for the profile
 	@echo "── Uninstalling profile: $(PROFILE) ──"
-	cd "$(STOW_DIR)" && $(STOW) -D .
+	cd "$(STOW_DIR)" && $(STOW) --target="$(STOW_TARGET)" -D .
 ifeq ($(PROFILE),macOS)
 	@if [ -L "$$HOME/.bash_profile" ]; then \
 		rm "$$HOME/.bash_profile"; \
@@ -86,7 +87,7 @@ endif
 list: ## Dry-run: show what stow would link (no changes)
 	@echo "Dry run for profile: $(PROFILE)"
 	@echo ""
-	cd "$(STOW_DIR)" && $(STOW) -n -v . 2>&1 || true
+	cd "$(STOW_DIR)" && $(STOW) --target="$(STOW_TARGET)" -n -v . 2>&1 || true
 ifeq ($(PROFILE),macOS)
 	@echo ""
 	@echo "Extra (non-stow):"

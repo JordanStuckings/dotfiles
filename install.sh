@@ -22,6 +22,7 @@ set -euo pipefail
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 PROFILE=""
 DRY_RUN=false
+STOW_TARGET="$HOME/.config"
 
 # ── Parse flags ──────────────────────────────────────────────
 for arg in "$@"; do
@@ -71,6 +72,47 @@ backup_and_link() {
   ok "Linked: $dest → $src"
 }
 
+backup_path() {
+  local path="$1"
+  local backup="${path}.backup-$(date +%Y%m%d-%H%M%S)"
+  if $DRY_RUN; then
+    info "  [dry-run] Would back up: $path → $backup"
+    return
+  fi
+  mv "$path" "$backup"
+  info "  Backed up existing $path"
+}
+
+prepare_stow_targets() {
+  local pkg src dest resolved
+
+  mkdir -p "$STOW_TARGET"
+
+  while IFS= read -r pkg; do
+    src="$STOW_DIR/$pkg"
+    dest="$STOW_TARGET/$pkg"
+
+    [ -e "$dest" ] || [ -L "$dest" ] || continue
+
+    if [ -L "$dest" ]; then
+      resolved="$(readlink "$dest")"
+      case "$resolved" in
+        "$src"|"$SCRIPT_DIR/$PROFILE/$pkg"|"$SCRIPT_DIR/${PROFILE,,}/$pkg")
+          if $DRY_RUN; then
+            info "  [dry-run] Would remove legacy symlink: $dest"
+          else
+            rm "$dest"
+            info "  Removed legacy symlink: $dest"
+          fi
+          continue
+          ;;
+      esac
+    fi
+
+    backup_path "$dest"
+  done < <(find "$STOW_DIR" -mindepth 1 -maxdepth 1 -type d -exec basename {} \; | sort)
+}
+
 # ── Validate profile ────────────────────────────────────────
 [ -d "$STOW_DIR" ] || err "Profile directory not found: $STOW_DIR"
 info "Installing profile: $PROFILE"
@@ -117,10 +159,11 @@ echo ""
 
 # ── 2. Stow ~/.config targets ───────────────────────────────
 info "Stowing $PROFILE → ~/.config …"
+prepare_stow_targets
 if $DRY_RUN; then
-  cd "$STOW_DIR" && stow -n -v . 2>&1 || true
+  cd "$STOW_DIR" && stow --target="$STOW_TARGET" -n -v . 2>&1 || true
 else
-  cd "$STOW_DIR" && stow .
+  cd "$STOW_DIR" && stow --target="$STOW_TARGET" .
   ok "Stow complete"
 fi
 echo ""

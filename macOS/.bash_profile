@@ -1,5 +1,5 @@
 export PATH="/opt/homebrew/bin:$PATH"
-
+export PATH="$HOME/.local/bin:$PATH"
 # Enable color support
 export CLICOLOR=1
 export LSCOLORS=ExFxBxDxCxegedabagacad
@@ -35,7 +35,7 @@ if [ -f "$HOME/.bash_profile.local" ]; then
 fi
 if [ -f "$HOME/.afm-bin-path-manager.bash" ]; then source "$HOME/.afm-bin-path-manager.bash"; fi
 
-function ads-custom () {
+function ads-custom() {
   supplied_url="$1"
   substring="://"
   if test "${string#*$substring}" != "$string"; then
@@ -53,26 +53,25 @@ function ads-custom () {
     -X dn:cn=$USER,ou=people,dc=office,dc=atlassian,dc=com \
     -Y GSSAPI \
     -O maxssf=0 \
-    ${@:2} | \
+    ${@:2} |
     awk '{ if ($0 ~ /::/) { cmd="echo "$2" | base64 -D";cmd| getline x;close(cmd); gsub(/::/, ": ", $1); print $1 x } else print $0 }'
 }
 
-function ads-all () {
+function ads-all() {
   GREPPY='.'
-  while getopts "g:" c
-  do
+  while getopts "g:" c; do
     case $c in
-      g) GREPPY=$OPTARG ;;
+    g) GREPPY=$OPTARG ;;
     esac
   done
 
-  shift $((OPTIND-1))
+  shift $((OPTIND - 1))
 
   (
-    dig _ldap._tcp.dc._msdcs.office.atlassian.com SRV +noquestion | \
-      grep "IN SRV" | \
-      sort | \
-      awk '{print $8}' | \
+    dig _ldap._tcp.dc._msdcs.office.atlassian.com SRV +noquestion |
+      grep "IN SRV" |
+      sort |
+      awk '{print $8}' |
       sed -e 's/.$//'
   ) | while read ad; do
     if ! ads-custom $ad $@ | sed "s/^/${ad}: /" | grep -i -E "$GREPPY"; then
@@ -89,11 +88,11 @@ function ads-usw2a { ads-custom usw2a-ad01.office.atlassian.com $@; }
 function ads-use1a { ads-custom use1a-ad01.office.atlassian.com $@; }
 alias ads=ads-apse2a
 
-function ads-csv () {
-  ads $@ | \
-    grep -v "^#" | \
-    grep -v "dn:" | \
-    awk -v FS=": " '{print $2}' | \
+function ads-csv() {
+  ads $@ |
+    grep -v "^#" |
+    grep -v "dn:" |
+    awk -v FS=": " '{print $2}' |
     awk -v RS='' '{gsub("\n", ","); print}'
 }
 
