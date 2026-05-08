@@ -23,17 +23,17 @@ requirements = ["sesh", "fd"]
 
 [source]
 command = [
-  "{ sesh list --icons; fd -d 1 -t d . ~/projects ~/.config | sed 's|/$||; s|^|📁 |'; }",
-  "sesh list -t --icons",
-  "sesh list -c --icons",
-  "sesh list -z --icons",
-  "fd -d 1 -t d . ~/projects ~/.config | sed 's|/$||; s|^|📁 |';",
+  "{ sesh list -t | sed \"s|^$HOME|~|\" | sed 's|^| |'; { sesh list -c | sed \"s|^$HOME|~|\"; sesh list -z | sed \"s|^$HOME|~|\"; fd -d 1 -t d . ~/projects ~/.config | sed \"s|/$||; s|^$HOME|~|\"; } | awk '!seen[$0]++' | sed 's|^|📁 |'; } | awk '{k=$0; sub(/^[^ ]+ /,\"\",k); if(!seen[k]++) print}'",
+  "sesh list -t | sed \"s|^$HOME|~|\" | sed 's|^| |'",
+  "sesh list -c | sed \"s|^$HOME|~|\" | sed 's|^|📁 |'",
+  "sesh list -z | sed \"s|^$HOME|~|\" | sed 's|^|📁 |'",
+  "fd -d 1 -t d . ~/projects ~/.config | sed \"s|/$||; s|^$HOME|~|\" | sed 's|^|📁 |'",
 ]
-ansi = true
-output = "{strip_ansi|split: :1..|join: }"
+ansi = false
+output = "{split: :1..|join: }"
 
 [preview]
-command = "sesh preview '{strip_ansi|split: :1..|join: }'"
+command = "sesh preview '{split: :1..|join: }'"
 
 [keybindings]
 enter = "actions:connect"
@@ -41,10 +41,10 @@ ctrl-d = ["actions:kill_session", "reload_source"]
 
 [actions.connect]
 description = "Connect to selected session"
-command = "sh -c 'target=\"$1\"; case \"$target\" in /*) name=$(basename \"$target\"); if [ -n \"$TMUX\" ]; then tmux has-session -t \"$name\" 2>/dev/null || tmux new-session -d -s \"$name\" -c \"$target\"; tmux switch-client -t \"$name\"; else tmux new-session -A -s \"$name\" -c \"$target\"; fi ;; *) sesh connect \"$target\" ;; esac' sh '{strip_ansi|split: :1..|join: }'"
+command = "sh -c 'target=\"$1\"; case \"$target\" in /*) name=$(basename \"$target\"); if [ -n \"$TMUX\" ]; then tmux has-session -t \"$name\" 2>/dev/null || tmux new-session -d -s \"$name\" -c \"$target\"; tmux switch-client -t \"$name\"; else tmux new-session -A -s \"$name\" -c \"$target\"; fi ;; *) sesh connect \"$target\" ;; esac' sh '{split: :1..|join: }'"
 mode = "execute"
 
 [actions.kill_session]
 description = "Kill selected tmux session (press Ctrl+r to reload)"
-command = "tmux kill-session -t '{strip_ansi|split: :1..|join: }'"
+command = "tmux kill-session -t '{split: :1..|join: }'"
 mode = "fork"

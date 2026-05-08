@@ -10,11 +10,6 @@
 # Fallback when no session name is provided
 # startup_command = "nvim"
 
-[[session]]
-name = "dotfiles 🔧"
-path = "~/.dotfiles"
-# startup_command = "nvim"
-
 # ── Add your pinned project sessions below ──────────────────
 # [[session]]
 # name = "myproject"
