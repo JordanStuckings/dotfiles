@@ -121,15 +121,19 @@ echo ""
 # ── 1. Prerequisites ────────────────────────────────────────
 info "Checking prerequisites…"
 
-# Homebrew (macOS / Linux)
+# Homebrew (macOS / Linux) — optional on omarchy/Linux
 if ! command -v brew &>/dev/null; then
-  warn "Homebrew not found"
-  if ! $DRY_RUN; then
+  if [ "$PROFILE" = "omarchy" ]; then
+    warn "brew (skipped — not required for omarchy)"
+  elif ! $DRY_RUN && [ -t 0 ]; then
+    warn "Homebrew not found"
     read -rp "  Install Homebrew? [y/N] " yn
     if [[ "$yn" =~ ^[Yy]$ ]]; then
       /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
       eval "$(/opt/homebrew/bin/brew shellenv 2>/dev/null || /home/linuxbrew/.linuxbrew/bin/brew shellenv 2>/dev/null)"
     fi
+  else
+    warn "brew not found"
   fi
 else
   ok "brew"

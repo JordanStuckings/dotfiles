@@ -33,7 +33,7 @@ command = "sesh preview '{split: :1..|join: }'"
 
 [keybindings]
 enter = "actions:connect"
-ctrl-d = ["actions:kill_session", "reload_source"]
+ctrl-x = ["actions:kill_session", "reload_source"]
 
 [actions.connect]
 description = "Connect to selected session"

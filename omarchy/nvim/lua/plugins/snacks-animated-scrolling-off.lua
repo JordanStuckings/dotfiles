@@ -1,8 +1,8 @@
 return {
-  "folke/snacks.nvim",
-  opts = {
-    scroll = {
-      enabled = true,
-    },
-  },
+	"folke/snacks.nvim",
+	opts = {
+		scroll = {
+			enabled = false, -- Disable scrolling animations
+		},
+	},
 }

@@ -1,16 +1,13 @@
 return {
   {
-    "ellisonleao/glow.nvim",
-    cmd = { "Glow" },
+    "iamcco/markdown-preview.nvim",
+    cmd = { "MarkdownPreviewToggle", "MarkdownPreview", "MarkdownPreviewStop" },
     ft = { "markdown" },
+    build = function()
+      vim.fn["mkdp#util#install"]()
+    end,
     keys = {
-      { "<leader>um", "<cmd>Glow<cr>", desc = "Markdown Preview (Glow)" },
-    },
-    opts = {
-      style = "dark",
-      border = "none",
-      width_ratio = 1.0,
-      height_ratio = 1.0,
+      { "<leader>um", "<cmd>MarkdownPreviewToggle<cr>", desc = "Markdown Preview" },
     },
   },
 }
