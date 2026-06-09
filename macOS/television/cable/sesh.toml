@@ -2,12 +2,25 @@
 # tv cable channel: sesh
 #
 # Bridges television → sesh for tmux session management.
-# Usage: `tv sesh` or bind to a tmux key (see Phase 4 in TODO.md)
+# Usage: `tv sesh` or bind to a tmux key (prefix + f)
+#
+# All entries are normalised to the same home-relative form
+# (e.g. `projects/abc`, `.config/nvim`) so the same target coming
+# from different sources (tmux sessions vs zoxide vs fd) dedups
+# cleanly.
+#
+# Icons: each row is prefixed with a single-width Nerd Font glyph,
+# colored per type (same approach as the `agents` tool — glyphs,
+# not double-width emoji, so they render and align everywhere):
+#   cyan  terminal glyph → live tmux session
+#   blue  folder glyph   → directory / config / zoxide entry
+# ANSI is rendered by tv (`ansi = true`); `strip_ansi|split` strips
+# the glyph + color back off before the path is handed to sesh.
 #
 # Data sources (cycled with Ctrl-S):
-#   1. Everything: sesh sessions + project dirs + ~/.config dirs (deduped)
+#   1. Everything: tmux sessions + config + zoxide + project dirs
 #   2. Active tmux sessions only
-#   3. Directories only: zoxide frecent + ~/projects + ~/.config (deduped)
+#   3. Directories only: zoxide frecent + ~/projects + ~/.config
 #
 # Keybindings:
 #   Enter  → connect to selected session
@@ -21,15 +34,15 @@ requirements = ["sesh", "fd"]
 
 [source]
 command = [
-  "{ sesh list -t | sed \"s|^$HOME|~|\" | sed 's|^| |'; { sesh list -z | sed \"s|^$HOME|~|\"; fd -d 1 -t d . ~/projects ~/.config | sed \"s|/$||; s|^$HOME|~|\"; } | awk '!seen[$0]++' | sed 's|^|📁 |'; } | awk '{k=$0; sub(/^[^ ]+ /,\"\",k); if(!seen[k]++) print}'",
-  "sesh list -t | sed \"s|^$HOME|~|\" | sed 's|^| |'",
-  "{ sesh list -z | sed \"s|^$HOME|~|\"; fd -d 1 -t d . ~/projects ~/.config | sed \"s|/$||; s|^$HOME|~|\"; } | awk '!seen[$0]++' | sed 's|^|📁 |'"
+  "{ sesh list -t | awk '{print \"S\\t\" $0}'; sesh list -c | awk '{print \"D\\t\" $0}'; sesh list -z | awk '{print \"D\\t\" $0}'; fd -d 1 -t d . ~/projects ~/.config | awk '{print \"D\\t\" $0}'; } | awk -F'\\t' -v home=\"$HOME\" -v g_s='' -v g_d='' 'BEGIN{c=\"\\033[36m\";b=\"\\033[34m\";r=\"\\033[0m\"} { p=$2; sub(\"^\" home \"/\",\"\",p); sub(\"^~/\",\"\",p); sub(\"/+$\",\"\",p); if(p!=\"\" && !seen[p]++){ ic=($1==\"S\")?c g_s r:b g_d r; print ic\" \"p } }'",
+  "sesh list -t | awk '{print \"S\\t\" $0}' | awk -F'\\t' -v home=\"$HOME\" -v g_s='' -v g_d='' 'BEGIN{c=\"\\033[36m\";b=\"\\033[34m\";r=\"\\033[0m\"} { p=$2; sub(\"^\" home \"/\",\"\",p); sub(\"^~/\",\"\",p); sub(\"/+$\",\"\",p); if(p!=\"\" && !seen[p]++){ ic=($1==\"S\")?c g_s r:b g_d r; print ic\" \"p } }'",
+  "{ sesh list -z | awk '{print \"D\\t\" $0}'; fd -d 1 -t d . ~/projects ~/.config | awk '{print \"D\\t\" $0}'; } | awk -F'\\t' -v home=\"$HOME\" -v g_s='' -v g_d='' 'BEGIN{c=\"\\033[36m\";b=\"\\033[34m\";r=\"\\033[0m\"} { p=$2; sub(\"^\" home \"/\",\"\",p); sub(\"^~/\",\"\",p); sub(\"/+$\",\"\",p); if(p!=\"\" && !seen[p]++){ ic=($1==\"S\")?c g_s r:b g_d r; print ic\" \"p } }'",
 ]
-ansi = false
-output = "{split: :1..|join: }"
+ansi = true
+output = "{strip_ansi|split: :1..|join: }"
 
 [preview]
-command = "sesh preview '{split: :1..|join: }'"
+command = "sh -c 'target=\"$1\"; if tmux has-session -t \"$target\" 2>/dev/null; then sesh preview \"$target\"; elif [ -d \"$HOME/$target\" ]; then sesh preview \"$HOME/$target\"; else sesh preview \"$target\"; fi' sh '{strip_ansi|split: :1..|join: }'"
 
 [keybindings]
 enter = "actions:connect"
@@ -37,10 +50,10 @@ ctrl-x = ["actions:kill_session", "reload_source"]
 
 [actions.connect]
 description = "Connect to selected session"
-command = "sh -c 'target=\"$1\"; case \"$target\" in /*) name=$(basename \"$target\"); if [ -n \"$TMUX\" ]; then tmux has-session -t \"$name\" 2>/dev/null || tmux new-session -d -s \"$name\" -c \"$target\"; tmux switch-client -t \"$name\"; else tmux new-session -A -s \"$name\" -c \"$target\"; fi ;; *) sesh connect \"$target\" ;; esac' sh '{split: :1..|join: }'"
+command = "sh -c 'target=\"$1\"; if tmux has-session -t \"$target\" 2>/dev/null; then sesh connect \"$target\"; elif [ -d \"$HOME/$target\" ]; then sesh connect \"$HOME/$target\"; else sesh connect \"$target\"; fi' sh '{strip_ansi|split: :1..|join: }'"
 mode = "execute"
 
 [actions.kill_session]
 description = "Kill selected tmux session (press Ctrl+r to reload)"
-command = "tmux kill-session -t '{split: :1..|join: }'"
+command = "tmux kill-session -t '{strip_ansi|split: :1..|join: }'"
 mode = "fork"
